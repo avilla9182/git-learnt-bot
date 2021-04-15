@@ -1,28 +1,40 @@
 import discord
 import os
+from dotenv import load_dotenv
 
-client = discord.Client()
+def main():
+    client = discord.Client()
+    load_dotenv()
 
-print(discord.__version__)
+    print("Using Discord Library version " + discord.__version__)
 
-@client.event
-async def on_ready():
-    print("We have logged in as {0.user}".format(client))
+    key = 'TOKEN'
+    token = os.getenv(key)
+    if(token == None):
+        print("Invalid Token. Please check that token in .env is correct/exists")
+        exit(1)
 
-@client.event
-async def on_message(message):
-    channel = message.channel
-    author = message.author
-    msg = message.content
-    print (channel.name)
-    print (channel.type)
 
-    if author == client.user:
-        return
+    @client.event
+    async def on_ready():
+        print("We have logged in as {0.user}".format(client))
 
-    if msg.startswith("$hello"):
-        await channel.send(content="Hello!")
 
-#client.run(os.getenv('TOKEN'))
-client.run('ODMwMjc3OTMwMzUyMzc3ODc2.YHEWlA.qyPvjAw8lWGsVBkmWgVSHakg_yo')
-#print("Hello World!\n")
+    @client.event
+    async def on_message(message):
+        channel = message.channel
+        author = message.author
+        msg = message.content
+
+        if author == client.user:
+            return
+
+        if msg.startswith("$hello"):
+            await channel.send(content="Hello!")
+
+
+    client.run(token)
+
+
+if __NAME__==__MAIN__:
+    main()
